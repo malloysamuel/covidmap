@@ -24,6 +24,9 @@
 </head>
 
 <body>
+    <!-- reference Moment.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
     <style>
         .map-overlay {
             font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -105,7 +108,6 @@
         </div> -->
     </div>
 
-    <!-- <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoibWFsbG95cyIsImEiOiJjam5xNWRmNHUwM3MyM3FwaHZna3hiNWk5In0.yZ_5gS64Iad6DuDVqnL2JQ';
@@ -117,18 +119,38 @@
         });
 
 
-        function range(start, end) {
-            return Array(end - start + 1).fill().map((_, idx) => start + idx)
+        // function range(start, end) {
+        //     return Array(end - start + 1).fill().map((_, idx) => start + idx)
+        // }
+
+        // var sim_times = range(0, 150)
+
+        // console.log(sim_times)
+
+        var startDate = new Date("2020-02-24"); //YYYY-MM-DD simulation start date (sim_time=0)
+        var endDate = new Date("2020-07-23"); //YYYY-MM-DD simulation end date (sim_time=150)
+
+        function getDateArray(startDate, stopDate) {
+            var dateArray = [];
+            var currentDate = moment(startDate);
+            var stopDate = moment(stopDate);
+            while (currentDate <= stopDate) {
+                dateArray.push(moment(currentDate).format('YYYY-MM-DD'))
+                currentDate = moment(currentDate).add(1, 'days');
+            }
+            return dateArray;
         }
 
-        var sim_times = range(0, 150)
+        var sim_dates = getDateArray(startDate, endDate);
+
         // console.log(sim_dates)
+
         function filterBy(sim_time) {
             var filters = ['==', 'sim_time', sim_time];
             map.setFilter('down75_detailed_results_daily_policy_10', filters);
             // map.setFilter('earthquake-labels', filters);
             // Set the label to the simulation time (1, 2, 3...)
-            document.getElementById('sim_time').textContent = sim_times[sim_time];
+            document.getElementById('sim_time').textContent = sim_dates[sim_time];
         }
 
 
