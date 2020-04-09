@@ -6,7 +6,7 @@
     <title>Display a map</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
     <style>
         body {
@@ -66,34 +66,34 @@
     <div id="map"></div>
     <div class="map-overlay top">
         <div class="map-overlay-inner">
-            <h2>COVID-19 Simulation in Columbus: <label id='sim_time'>12PM</label></h2>
+            <h2>Simulation Time: <label id='sim_time'>12PM</label></h2>
             <label id="sim_time"></label>
-            <input id="slider" type="range" min="0" max="140" step="7" value="1" list = "tickmarks"/>
-			<button type="button" id="start">start</button>
-			<button type="button" id="stop">stop</button>
-			<datalist id="tickmarks">
-				<option>0</option>
-				<option>7</option>
-				<option>14</option>
-				<option>21</option>
-				<option>28</option>
-				<option>35</option>
-				<option>42</option>
-				<option>49</option>
-				<option>56</option>
-				<option>63</option>
-				<option>70</option>
-				<option>77</option>
-				<option>84</option>
-				<option>91</option>
-				<option>98</option>
-				<option>105</option>
-				<option>112</option>
-				<option>119</option>
-				<option>126</option>
-				<option>133</option>
-				<option>140</option>
-			</datalist>
+            <input id="slider" type="range" min="0" max="140" step="7" value="1" list="tickmarks" />
+            <button type="button" id="start">start</button>
+            <button type="button" id="stop">stop</button>
+            <datalist id="tickmarks">
+                <option>0</option>
+                <option>7</option>
+                <option>14</option>
+                <option>21</option>
+                <option>28</option>
+                <option>35</option>
+                <option>42</option>
+                <option>49</option>
+                <option>56</option>
+                <option>63</option>
+                <option>70</option>
+                <option>77</option>
+                <option>84</option>
+                <option>91</option>
+                <option>98</option>
+                <option>105</option>
+                <option>112</option>
+                <option>119</option>
+                <option>126</option>
+                <option>133</option>
+                <option>140</option>
+            </datalist>
         </div>
         <!-- <div class="map-overlay-inner">
 <div id="legend" class="legend">
@@ -178,24 +178,24 @@
                     filterBy(sim_time);
                 });
         });
-		var myTimer;
-		d3.select("#start").on("click", function() {
-			clearInterval (myTimer);
-			myTimer = setInterval (function() {
-			var b= d3.select("#slider");
-			  var t = (+b.property("value") + 7) % (+b.property("max") + 7);
-			  if (t == 0) { t = +b.property("min"); }
-			  b.property("value", t);
-			  var sim_time = parseInt(document.getElementById("slider").value, 10);
-			  filterBy(sim_time);
-			  update (t);
-			  document.write(b.property("value"));
-			}, 1000);
-		});
+        var myTimer;
+        d3.select("#start").on("click", function () {
+            clearInterval(myTimer);
+            myTimer = setInterval(function () {
+                var b = d3.select("#slider");
+                var t = (+b.property("value") + 7) % (+b.property("max") + 7);
+                if (t == 0) { t = +b.property("min"); }
+                b.property("value", t);
+                var sim_time = parseInt(document.getElementById("slider").value, 10);
+                filterBy(sim_time);
+                update(t);
+                document.write(b.property("value"));
+            }, 1000);
+        });
 
-		d3.select("#stop").on("click", function() {
-			clearInterval (myTimer);
-		});
+        d3.select("#stop").on("click", function () {
+            clearInterval(myTimer);
+        });
     </script>
 </body>
 
