@@ -63,12 +63,13 @@
             cursor: ew-resize;
         }
     </style>
+
     <div id="map"></div>
     <div class="map-overlay top">
         <div class="map-overlay-inner">
-            <h2>Simulation Time: <label id='sim_time'>12PM</label></h2>
+            <h2>Simulation Time: <label id='sim_time'></label></h2>
             <label id="sim_time"></label>
-            <input id="slider" type="range" min="0" max="140" step="7" value="1" list="tickmarks" />
+            <input id="slider" type="range" min="0" max="150" step="7" value="1" list="tickmarks" />
             <button type="button" id="start">start</button>
             <button type="button" id="stop">stop</button>
             <datalist id="tickmarks">
@@ -93,18 +94,19 @@
                 <option>126</option>
                 <option>133</option>
                 <option>140</option>
+                <option>147</option>
             </datalist>
         </div>
         <!-- <div class="map-overlay-inner">
-<div id="legend" class="legend">
-<div class="bar"></div>
-<div>Magnitude (m)</div>
-</div>
-</div> -->
+            <div id="legend" class="legend">
+                <div class="bar"></div>
+                <div>Magnitude (m)</div>
+            </div>
+        </div> -->
     </div>
-    <!--
-<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
--->
+
+    <!-- <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
+
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoibWFsbG95cyIsImEiOiJjam5xNWRmNHUwM3MyM3FwaHZna3hiNWk5In0.yZ_5gS64Iad6DuDVqnL2JQ';
         var map = new mapboxgl.Map({
@@ -113,10 +115,13 @@
             center: [-83.00127, 39.97898], // starting position [lng, lat]
             zoom: 10 // starting zoom
         });
+
+
         function range(start, end) {
             return Array(end - start + 1).fill().map((_, idx) => start + idx)
         }
-        var sim_times = range(1, 140)
+
+        var sim_times = range(0, 150)
         // console.log(sim_dates)
         function filterBy(sim_time) {
             var filters = ['==', 'sim_time', sim_time];
@@ -125,6 +130,8 @@
             // Set the label to the simulation time (1, 2, 3...)
             document.getElementById('sim_time').textContent = sim_times[sim_time];
         }
+
+
         map.on('load', function () {
             map.addSource('down75_detailed_results_daily_policy_10', {
                 type: 'vector',
@@ -178,6 +185,8 @@
                     filterBy(sim_time);
                 });
         });
+
+
         var myTimer;
         d3.select("#start").on("click", function () {
             clearInterval(myTimer);
@@ -196,6 +205,8 @@
         d3.select("#stop").on("click", function () {
             clearInterval(myTimer);
         });
+
+
     </script>
 </body>
 
