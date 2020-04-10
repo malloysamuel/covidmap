@@ -3,11 +3,18 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Display a map</title>
+    <title>COVID-19 Simulation Map</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+
+    <!-- references math.js -->
+    <script src="https://unpkg.com/mathjs@6.6.2/dist/math.min.js"></script>
+
+    <!-- references moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
     <style>
         body {
             margin: 0;
@@ -21,12 +28,10 @@
             width: 100%;
         }
     </style>
+
 </head>
 
 <body>
-    <!-- reference Moment.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-
     <style>
         .map-overlay {
             font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -75,31 +80,9 @@
             <input id="slider" type="range" min="0" max="150" step="7" value="1" list="tickmarks" />
             <button type="button" id="start">start</button>
             <button type="button" id="stop">stop</button>
-            <datalist id="tickmarks">
-                <option>0</option>
-                <option>7</option>
-                <option>14</option>
-                <option>21</option>
-                <option>28</option>
-                <option>35</option>
-                <option>42</option>
-                <option>49</option>
-                <option>56</option>
-                <option>63</option>
-                <option>70</option>
-                <option>77</option>
-                <option>84</option>
-                <option>91</option>
-                <option>98</option>
-                <option>105</option>
-                <option>112</option>
-                <option>119</option>
-                <option>126</option>
-                <option>133</option>
-                <option>140</option>
-                <option>147</option>
-            </datalist>
+            <datalist id="tickmarks"></datalist>
         </div>
+
         <!-- <div class="map-overlay-inner">
             <div id="legend" class="legend">
                 <div class="bar"></div>
@@ -110,30 +93,29 @@
 
 
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoibWFsbG95cyIsImEiOiJjam5xNWRmNHUwM3MyM3FwaHZna3hiNWk5In0.yZ_5gS64Iad6DuDVqnL2JQ';
-        var map = new mapboxgl.Map({
-            container: 'map', // container id
-            style: 'mapbox://styles/malloys/ck8qrxbuu0i9o1irwnqlmuumf', // stylesheet location
-            center: [-83.00127, 39.97898], // starting position [lng, lat]
-            zoom: 10 // starting zoom
+        // Automatically Assign tickmarks into datalist
+        var sim_time_min = 0
+        var sim_time_max = 150
+        var sim_step = 7
+        var sim_times = math.range(start = sim_time_min, end = sim_time_max, step = sim_step, includeEnd = true)
+        var tick_mark_list = document.getElementById('tickmarks')
+        sim_times.forEach(function (item) {
+            var option = document.createElement('option');
+            option.value = item;
+            tick_mark_list.appendChild(option);
         });
 
+        // Create sim_dates to display dates in the silder instead of sim_time
+        var startDate = moment('2020-02-24', 'YYYY-MM-DD') // simulation start date (sim_time=0)
+        var endDate = moment(startDate).add(sim_time_max, 'days') // simulation end date (sim_time=150)
 
-        // function range(start, end) {
-        //     return Array(end - start + 1).fill().map((_, idx) => start + idx)
-        // }
-
-        // var sim_times = range(0, 150)
-
-        // console.log(sim_times)
-
-        var startDate = new Date("2020-02-24"); //YYYY-MM-DD simulation start date (sim_time=0)
-        var endDate = new Date("2020-07-23"); //YYYY-MM-DD simulation end date (sim_time=150)
+        // console.log(startDate)
+        // console.log(endDate)
 
         function getDateArray(startDate, stopDate) {
             var dateArray = [];
-            var currentDate = moment(startDate);
-            var stopDate = moment(stopDate);
+            var currentDate = startDate;
+            var stopDate = stopDate;
             while (currentDate <= stopDate) {
                 dateArray.push(moment(currentDate).format('YYYY-MM-DD'))
                 currentDate = moment(currentDate).add(1, 'days');
@@ -143,7 +125,15 @@
 
         var sim_dates = getDateArray(startDate, endDate);
 
-        // console.log(sim_dates)
+        console.log(sim_dates)
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWFsbG95cyIsImEiOiJjam5xNWRmNHUwM3MyM3FwaHZna3hiNWk5In0.yZ_5gS64Iad6DuDVqnL2JQ';
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/malloys/ck8qrxbuu0i9o1irwnqlmuumf', // stylesheet location
+            center: [-83.00127, 39.97898], // starting position [lng, lat]
+            zoom: 10 // starting zoom
+        });
 
         function filterBy(sim_time) {
             var filters = ['==', 'sim_time', sim_time];
@@ -198,7 +188,7 @@
                 }
             });
             // Set filter to first simulation time
-            // 0 means the sim_time = 1
+            // 0 means the sim_time = 0
             filterBy(0);
             document
                 .getElementById('slider')
@@ -214,7 +204,7 @@
             clearInterval(myTimer);
             myTimer = setInterval(function () {
                 var b = d3.select("#slider");
-                var t = (+b.property("value") + 7) % (+b.property("max") + 7);
+                var t = (+b.property("value") + sim_step) % (+b.property("max") + sim_step);
                 if (t == 0) { t = +b.property("min"); }
                 b.property("value", t);
                 var sim_time = parseInt(document.getElementById("slider").value, 10);
