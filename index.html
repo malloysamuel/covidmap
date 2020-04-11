@@ -8,10 +8,8 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
-
     <!-- references math.js -->
     <script src="https://unpkg.com/mathjs@6.6.2/dist/math.min.js"></script>
-
     <!-- references moment.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
@@ -93,12 +91,20 @@
 
 
     <script>
-        // Automatically Assign tickmarks into datalist
+        // Set simulation time range
         var sim_time_min = 0
         var sim_time_max = 150
         var sim_step = 7
+
+        //Reset the slider range
+        document.getElementById("slider").min = sim_time_min
+        document.getElementById("slider").max = sim_time_max
+        document.getElementById("slider").step = sim_step
+
+        // Automatically Assign tickmarks into datalist
         var sim_times = math.range(start = sim_time_min, end = sim_time_max, step = sim_step, includeEnd = true)
         var tick_mark_list = document.getElementById('tickmarks')
+        // add options into the datalist
         sim_times.forEach(function (item) {
             var option = document.createElement('option');
             option.value = item;
@@ -108,9 +114,6 @@
         // Create sim_dates to display dates in the silder instead of sim_time
         var startDate = moment('2020-02-24', 'YYYY-MM-DD') // simulation start date (sim_time=0)
         var endDate = moment(startDate).add(sim_time_max, 'days') // simulation end date (sim_time=150)
-
-        // console.log(startDate)
-        // console.log(endDate)
 
         function getDateArray(startDate, stopDate) {
             var dateArray = [];
@@ -125,8 +128,9 @@
 
         var sim_dates = getDateArray(startDate, endDate);
 
-        console.log(sim_dates)
+        //console.log(sim_dates)
 
+        // Add mapbox token and style URL
         mapboxgl.accessToken = 'pk.eyJ1IjoibWFsbG95cyIsImEiOiJjam5xNWRmNHUwM3MyM3FwaHZna3hiNWk5In0.yZ_5gS64Iad6DuDVqnL2JQ';
         var map = new mapboxgl.Map({
             container: 'map', // container id
@@ -135,15 +139,35 @@
             zoom: 10 // starting zoom
         });
 
+        // Create function to filter mapbox layer data when sim_time = the slider input
         function filterBy(sim_time) {
-            var filters = ['==', 'sim_time', sim_time];
+            var filters = [
+                'all',
+                ['==', 'sim_time', sim_time],
+                ['==', 'status', 3] // only show infected cases
+            ];
             map.setFilter('down75_detailed_results_daily_policy_10', filters);
-            // map.setFilter('earthquake-labels', filters);
-            // Set the label to the simulation time (1, 2, 3...)
+            // Set the label to the simulation date
             document.getElementById('sim_time').textContent = sim_dates[sim_time];
         }
 
+        // // Create a popup, but don't add it to the map yet.
+        // var popup = new mapboxgl.Popup({
+        //     closeButton: false,
+        //     closeOnClick: false
+        // });
 
+        // function getStatus(status) {
+        //     var status_name;
+        //     if (status == 3) {
+        //         status_name = "Infected";
+        //     } else {
+        //         status_name = "Recovered";
+        //     }
+        //     return status_name
+        // }
+
+        // Load the mapbox title data with URL
         map.on('load', function () {
             map.addSource('down75_detailed_results_daily_policy_10', {
                 type: 'vector',
@@ -154,9 +178,15 @@
             //add data layer
             map.addLayer({
                 "id": "down75_detailed_results_daily_policy_10",
-                "type": "heatmap",
                 "source": "down75_detailed_results_daily_policy_10",
                 "source-layer": "down75_detailed_results_daily_policy_10",
+                // "type": "circle",
+                // "layout": {},
+                // "paint": {
+                //     "circle-radius": 3,
+                //     "circle-color": "#b31f0e"
+                // }
+                "type": "heatmap",
                 "layout": { "visibility": "visible" },
                 "paint": {
                     "heatmap-radius": 10,
@@ -187,18 +217,56 @@
                     ],
                 }
             });
-            // Set filter to first simulation time
+
+            // // Show hover info: only for type = "circle"? not work for heatmap
+            // map.on('mouseenter', 'down75_detailed_results_daily_policy_10', function (e) {
+            //     // Change the cursor style as a UI indicator.
+            //     map.getCanvas().style.cursor = 'pointer';
+
+            //     var coordinates = e.features[0].geometry.coordinates.slice();
+            //     var status = e.features[0].properties.status;
+            //     var status_str = getStatus(status);
+
+
+            //     // Ensure that if the map is zoomed out such that multiple
+            //     // copies of the feature are visible, the popup appears
+            //     // over the copy being pointed to.
+            //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            //         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            //     }
+
+            //     // Populate the popup and set its coordinates
+            //     // based on the feature found.
+            //     popup
+            //         .setLngLat(coordinates)
+            //         .setHTML(status_str)
+            //         .addTo(map);
+            // });
+
+            // map.on('mouseleave', 'down75_detailed_results_daily_policy_10', function () {
+            //     map.getCanvas().style.cursor = '';
+            //     popup.remove();
+            // });
+
+
+            // Set filter to the first simulation time
             // 0 means the sim_time = 0
             filterBy(0);
+
+            //
             document
                 .getElementById('slider')
                 .addEventListener('input', function (e) {
                     var sim_time = parseInt(e.target.value, 10);
                     filterBy(sim_time);
                 });
+
         });
 
 
+
+
+        // Define function to control the stop and start button
         var myTimer;
         d3.select("#start").on("click", function () {
             clearInterval(myTimer);
