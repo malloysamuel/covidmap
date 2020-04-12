@@ -273,12 +273,9 @@
             myTimer = setInterval(function () {
                 var b = d3.select("#slider");
                 var t = (+b.property("value") + sim_step) % (+b.property("max") + sim_step);
-                if (t == 0) { t = +b.property("min"); }
                 b.property("value", t);
                 var sim_time = parseInt(document.getElementById("slider").value, 10);
                 filterBy(sim_time);
-                update(t);
-                document.write(b.property("value"));
             }, 1000);
         });
 
