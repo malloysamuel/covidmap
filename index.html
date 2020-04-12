@@ -97,9 +97,15 @@
         });
 
         map.addControl(
-            new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                mapboxgl: mapboxgl
+            new MapboxGeocoder({ // Initialize the geocoder
+                accessToken: mapboxgl.accessToken, // Set the access token
+                mapboxgl: mapboxgl, // Set the mapbox-gl instance
+                placeholder: 'Search in Columbus', // Placeholder text for the search bar
+                bbox: [-83.25739, 39.79629, -82.76209, 40.14232], // (min_lng, min_lat, max_lng, max_lat) The Boundary for Columbus 
+                proximity: {
+                    longitude: -83.00127,
+                    latitude: 39.97898
+                } // Coordinates of Columbus
             })
         );
 
