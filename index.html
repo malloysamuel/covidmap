@@ -40,25 +40,17 @@
             padding: 10px;
         }
 
-        .map-overlay .map-overlay-inner {
-            background-color: #fff;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
         .map-overlay h2 {
             line-height: 24px;
             display: block;
             margin: 0 0 10px;
         }
 
-        .map-overlay .legend .bar {
+        /* .map-overlay .legend .bar {
             height: 10px;
             width: 100%;
             background: linear-gradient(to right, #FCA107, #7F3121);
-        }
+        } */
 
         .map-overlay input {
             background-color: transparent;
@@ -68,11 +60,66 @@
             margin: 0;
             cursor: ew-resize;
         }
+
+
+        .map-overlay button#start {
+            background-color: #4b6346;
+            color: #fff;
+            border-radius: 30px;
+            padding: 8px 15px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            transition-duration: 0.4s;
+        }
+
+        button#start:hover {
+            background-color: #2a3027;
+            color: white;
+        }
+
+        .map-overlay button#stop {
+            background-color: #38262a;
+            color: #fff;
+            border-radius: 30px;
+            padding: 8px 15px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            transition-duration: 0.4s;
+        }
+
+        button#stop:hover {
+            background-color: #140c0c;
+            color: white;
+        }
+
+        /* remove the focus outline */
+        button:focus {
+            outline: 0 !important;
+        }
+
+        .map-overlay .map-overlay-inner {
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .map-overlay .map-overlay-timeline {
+            background-color: rgba(51, 51, 50, 0.5);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+            -webkit-text-fill-color: #fff;
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 25px;
+        }
     </style>
 
     <div id="map"></div>
     <div class="map-overlay top">
-        <div class="map-overlay-inner">
+        <div class="map-overlay-timeline">
             <h2>Simulation Time: <label id='sim_time'></label></h2>
             <label id="sim_time"></label>
             <input id="slider" type="range" min="0" max="150" step="7" value="1" list="tickmarks" />
@@ -80,6 +127,28 @@
             <button type="button" id="stop">stop</button>
             <datalist id="tickmarks"></datalist>
         </div>
+
+        <div class="map-overlay-inner">
+            <label class="container">One
+                <input type="checkbox" checked="checked">
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="container">Two
+                <input type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="container">Three
+                <input type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+
+            <label class="container">Four
+                <input type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+        </div>>
 
         <!-- <div class="map-overlay-inner">
             <div id="legend" class="legend">
@@ -127,8 +196,6 @@
         }
 
         var sim_dates = getDateArray(startDate, endDate);
-
-        //console.log(sim_dates)
 
         // Add mapbox token and style URL
         mapboxgl.accessToken = 'pk.eyJ1IjoibWFsbG95cyIsImEiOiJjam5xNWRmNHUwM3MyM3FwaHZna3hiNWk5In0.yZ_5gS64Iad6DuDVqnL2JQ';
@@ -273,12 +340,9 @@
             myTimer = setInterval(function () {
                 var b = d3.select("#slider");
                 var t = (+b.property("value") + sim_step) % (+b.property("max") + sim_step);
-                if (t == 0) { t = +b.property("min"); }
                 b.property("value", t);
                 var sim_time = parseInt(document.getElementById("slider").value, 10);
                 filterBy(sim_time);
-                update(t);
-                document.write(b.property("value"));
             }, 1000);
         });
 
