@@ -5,31 +5,32 @@
     <meta charset="utf-8" />
     <title>COVID-19 Simulation Map</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <!-- references mapbox-gl.js -->
+    <!-- JS: mapbox-gl.js -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
-    <!-- references d3.js -->
+    <!-- JS: d3.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
-    <!-- references math.js -->
+    <!-- JS: math.js -->
     <script src="https://unpkg.com/mathjs@6.6.2/dist/math.min.js"></script>
-    <!-- references moment.js -->
+    <!-- JS: moment.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <!-- BS4 CSS
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
-    <!-- MapBox CSS -->
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
-    <!-- Cutomized CSS needed in this html-->
-    <link rel="stylesheet" href="css/style_new.css">
-
+    <!-- JS: mapbox geocoder for searching location -->
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js">
     </script>
+    <!-- JS: Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
+    <!-- CSS : BS4
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
+    <!-- CSS : Mapbox -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+    <!-- CSS: Customized style needed in this html-->
+    <link rel="stylesheet" href="css/style_new.css">
+    <!-- CSS : mapbox geocoder for searching location -->
     <link rel="stylesheet"
         href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
         type="text/css" />
 
-    <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
 </head>
 
