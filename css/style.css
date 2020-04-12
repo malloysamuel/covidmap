@@ -57,12 +57,12 @@ body {
 }
 
 button#start:hover {
-    background-color: #2a3027;
+    background-color: #9c9e16;
     color: white;
 }
 
 .map-overlay button#stop {
-    background-color: #38262a;
+    background-color: #4b6346;
     color: #fff;
     border-radius: 30px;
     padding: 8px 15px;
@@ -73,7 +73,7 @@ button#start:hover {
 }
 
 button#stop:hover {
-    background-color: #140c0c;
+    background-color: #9c9e16;
     color: white;
 }
 
