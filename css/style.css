@@ -1,0 +1,100 @@
+
+/* Map CSS */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+
+/* Features CSS */
+.map-overlay {
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    position: absolute;
+    width: 25%;
+    top: 0;
+    left: 0;
+    padding: 10px;
+}
+
+.map-overlay h2 {
+    line-height: 24px;
+    display: block;
+    margin: 0 0 10px;
+}
+
+/* .map-overlay .legend .bar {
+    height: 10px;
+    width: 100%;
+    background: linear-gradient(to right, #FCA107, #7F3121);
+} */
+
+.map-overlay input {
+    background-color: transparent;
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    margin: 0;
+    cursor: ew-resize;
+}
+
+
+.map-overlay button#start {
+    background-color: #4b6346;
+    color: #fff;
+    border-radius: 30px;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    transition-duration: 0.4s;
+}
+
+button#start:hover {
+    background-color: #2a3027;
+    color: white;
+}
+
+.map-overlay button#stop {
+    background-color: #38262a;
+    color: #fff;
+    border-radius: 30px;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    transition-duration: 0.4s;
+}
+
+button#stop:hover {
+    background-color: #140c0c;
+    color: white;
+}
+
+/* remove the focus outline */
+button:focus {
+    outline: 0 !important;
+}
+
+.map-overlay .map-overlay-inner {
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.map-overlay .map-overlay-timeline {
+    background-color: rgba(51, 51, 50, 0.5);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+    -webkit-text-fill-color: #fff;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 25px;
+}
