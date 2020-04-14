@@ -71,7 +71,7 @@
         });
 
         // Create sim_dates to display dates in the silder instead of sim_time
-        var startDate = moment('2020-02-24', 'YYYY-MM-DD') // simulation start date (sim_time=0)
+        var startDate = moment('2020-01-29', 'YYYY-MM-DD') // simulation start date (sim_time=0)
         var endDate = moment(startDate).add(sim_time_max, 'days') // simulation end date (sim_time=150)
 
         function getDateArray(startDate, stopDate) {
@@ -96,6 +96,7 @@
             zoom: 10 // starting zoom
         });
 
+        // Add mapbox geocoder to search location
         map.addControl(
             new MapboxGeocoder({ // Initialize the geocoder
                 accessToken: mapboxgl.accessToken, // Set the access token
